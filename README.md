@@ -15,7 +15,7 @@ The frontend module blade is designed for the **Original** and **Disposable Them
 
 I know, the basic system allows pilots to change their HUB from the profile settings page. But if you want a little bit more variety and interaction with your pilots and finances and want to disable the freedom of changing HUBs every time, than this module is for you. This module provides an admin page where you can work on all requests including settings for the price per request and block time between multiple requests.
 
-_**Note:** If you want to disable the original HUB select in pilots profile settings, you can do this in `/resources/views/layouts/Disposable_v3/profile/fields.blade.php`. The Disposable Theme provides a theme.json, just look for `user_disable_hub`._
+_**Note:** If you want to disable the original HUB select in pilots profile settings, you can do this in `/resources/views/layouts/default/profile/fields.blade.php`. The Disposable Theme provides a theme.json, just look for `user_disable_hub`._
 
 ## Compatibility
 
