@@ -7,7 +7,7 @@
       <div class="card border-blue-bottom">
         <div class="content">
           <div class="row">
-            <form method="POST" action="{{ route('admin.sptransfer.storeSettings') }}">
+            <form action="{{ route('admin.sptransfer.storeSettings') }}" method="POST" >
               @csrf
               <div class="col-lg-12">
                 <span style="float:right"><button type="submit" class="btn btn-success">Save</button></span>
