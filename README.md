@@ -43,3 +43,4 @@ Please use the GitHub [issue](https://github.com/PaintSplasher/phpvms7_SPTransfe
 
 04.JULY.24
 * Initial Release
+* New default table value
