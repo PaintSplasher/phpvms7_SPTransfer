@@ -23,7 +23,7 @@ This module is fully compatible with phpVMS v7 and will work with any other modu
 
 ## Installation and Updates
 
-_Make sure the name of the folder you upload is `**SPTransfer**`._
+_Make sure the name of the folder you upload is **SPTransfer**._
 * Manual Install : Upload contents of the package to your phpVMS root `/modules` folder via ftp or your control panel's file manager
 * GitHub Clone : Clone/pull repository to your phpVMS root `/modules/SPTransfer` folder
 * phpVMS Module Installer : Go to admin > addons/modules , click Add New , select downloaded file then click Add Module
