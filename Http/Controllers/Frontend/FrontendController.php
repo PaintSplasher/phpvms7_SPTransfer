@@ -10,7 +10,6 @@ use App\Support\Money;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\SPTransfer\Models\DB_SPTransfer;
 use Modules\SPTransfer\Models\DB_SPSettings;
@@ -24,7 +23,9 @@ class FrontendController extends Controller
         $user = User::with('home_airport', 'journal')->find(Auth::id()); 
         $hubs = Airport::where('hub', 1)->orderby('name')->count();
         $settings = DB_SPSettings::first();  
-        $lasttransfer = DB_SPTransfer::where('user_id', $user->id)->lastest();
+        $last_transfer = DB_SPTransfer::where('user_id', $user->id)->latest()->first();
+
+        // dd($lasttransfer);
 
         if (!$hubs) {
             flash()->error('No HUBs found.');
@@ -42,19 +43,19 @@ class FrontendController extends Controller
             }
         }        
             
-        if ($lasttransfer) {        
-            $statusLabel = (array_key_exists($lasttransfer->state, Status::$labels)) ? Status::$labels[$lasttransfer->state] : null;
+        if ($last_transfer) {        
+            $statusLabel = filled($last_transfer->state) ? Status::label($last_transfer->state) : null;
             $daysLimit = filled($settings->limit) ? $settings->limit : 0;
-            $limit = ($lasttransfer->created_at > Carbon::now()->subDays($daysLimit)) ? 1 : 0;
+            $limit = ($last_transfer->created_at > Carbon::now()->subDays($daysLimit)) ? 1 : 0;
         }
 
         return view('sptransfer::index', [
             'hubs'              => $hubs,
             'current_hub'       => $user->home_airport_id,
             'current_hub_name'  => optional($user->home_airport)->name,
-            'lasttransfer'      => $lasttransfer,
+            'lasttransfer'      => $last_transfer,
             'status'            => isset($statusLabel) ? $statusLabel : null,
-            'state'             => $lasttransfer->state ?? null,
+            'state'             => $last_transfer->state ?? null,
             'limit'             => $limit ?? null,
             'daysLimit'         => $daysLimit ?? null,
             'spfinance'         => isset($spfinance) ? $spfinance : false,

@@ -45,7 +45,7 @@
                 </tr>
                 <tr>
                   <td>@lang('SPTransfer::common.reqhub')</td>
-                  <td>{{ $lasttransfer->hub_request }}</td>
+                  <td>{{ $lasttransfer->hub_request->full_name }}</td>
                 </tr>
                 <tr>
                   <td>@lang('SPTransfer::common.reqdate')</td>

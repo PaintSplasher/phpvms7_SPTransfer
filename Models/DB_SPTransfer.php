@@ -3,8 +3,10 @@
 namespace Modules\SPTransfer\Models;
 
 use App\Contracts\Model;
+use App\Models\Airport;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Kyslik\ColumnSortable\Sortable;
 
 class DB_SPTransfer extends Model

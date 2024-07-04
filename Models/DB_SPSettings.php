@@ -12,8 +12,8 @@ class DB_SPSettings extends Model
     protected $table = 'sptransfer_settings';
 
     protected $fillable = [
-      'sp_price',
-      'sp_days',
+        'sp_price',
+        'sp_days',
     ];
 
     // Better to define them here too, should follow the DB structure and code, gives an insight about stuff easily
