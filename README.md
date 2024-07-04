@@ -1,4 +1,4 @@
-# SPTransfer v1.0
+# SPTransfer v1.1
 
 phpVMS v7 module for a HUB Transfer feature
 
