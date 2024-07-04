@@ -15,4 +15,10 @@ class DB_SPSettings extends Model
       'sp_price',
       'sp_days',
     ];
+
+    // Technically not needed for default fields but here for exampling purposes
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
 }
