@@ -22,10 +22,10 @@ class FrontendController extends Controller
     public function index()
     {
         $statusLabel = null;
-        $user = User::find(Auth::id()); 
+        $user = User::with('home_airport', 'journal')->find(Auth::id()); 
         $hubs = Airport::where('hub', 1)->orderby('name')->count();
         $settings = DB_SPSettings::first();  
-        $lasttransfer = DB::table('sptransfer')->where('user_id', Auth::id())->orderBy('created_at', 'desc')->first(); 
+        $lasttransfer = DB_SPTransfer::where('user_id', $user->id)->last();
 
         if (!$hubs) {
             flash()->error('No HUBs found.');
@@ -50,8 +50,6 @@ class FrontendController extends Controller
         }        
             
         if ($lasttransfer) {
-            $lasttransfer->created_at = Carbon::parse($lasttransfer->created_at);
-
             if (array_key_exists($lasttransfer->state, Status::$labels)) {
                 $statusLabel = Status::$labels[$lasttransfer->state];
             }            
