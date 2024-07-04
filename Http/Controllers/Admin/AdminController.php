@@ -13,7 +13,7 @@ class AdminController extends Controller
     // Open up the admin page and show the transfers
     public function index()
     {
-        $requests = DB_SPTransfer::with('user')->sortable(['created_at' => 'desc'])->paginate();
+        $requests = DB_SPTransfer::with('user')->sortable(['created_at' => 'desc'])->paginate(10);
         $settings = DB_SPSettings::first();
 
         return view('sptransfer::admin.index', [
