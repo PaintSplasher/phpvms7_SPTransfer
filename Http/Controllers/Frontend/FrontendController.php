@@ -5,23 +5,22 @@ namespace Modules\SPTransfer\Http\Controllers\Frontend;
 use App\Contracts\Controller;
 use App\Models\Airport;
 use App\Models\User;
-use App\Support\Money;
 use App\Services\FinanceService;
+use App\Support\Money;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Modules\SPTransfer\Models\Enums\Status;
 use Modules\SPTransfer\Models\DB_SPTransfer;
 use Modules\SPTransfer\Models\DB_SPSettings;
+use Modules\SPTransfer\Models\Enums\Status;
 
 class FrontendController extends Controller
 {
     // Open up the index page and provide information
     public function index()
     {
-        $statusLabel = null;
         $user = User::with('home_airport', 'journal')->find(Auth::id()); 
         $hubs = Airport::where('hub', 1)->orderby('name')->count();
         $settings = DB_SPSettings::first();  
@@ -49,21 +48,10 @@ class FrontendController extends Controller
             $spvalue = 0;
         }        
             
-        if ($lasttransfer) {
-            if (array_key_exists($lasttransfer->state, Status::$labels)) {
-                $statusLabel = Status::$labels[$lasttransfer->state];
-            }            
-
-            if ($settings) {
-                $daysLimit = $settings->limit;
-                $comparisonDate = Carbon::now()->subDays($daysLimit);
-            }
-
-            if ($lasttransfer->created_at > $comparisonDate) {
-                $limit = 1;
-            } else {
-                $limit = 0;
-            }
+        if ($lasttransfer) {        
+            $statusLabel = (array_key_exists($lasttransfer->state, Status::$labels)) ? Status::$labels[$lasttransfer->state] : null;
+            $daysLimit = filled($settings->limit) ? $settings->limit : 0;
+            $limit = ($lasttransfer->created_at > Carbon::now()->subDays($daysLimit)) ? 1 : 0;
         }
 
         return view('sptransfer::index', [
@@ -71,7 +59,7 @@ class FrontendController extends Controller
             'current_hub'       => $user->home_airport_id,
             'current_hub_name'  => optional($user->home_airport)->name,
             'lasttransfer'      => $lasttransfer,
-            'status'            => $statusLabel,
+            'status'            => isset($statusLabel) ? $statusLabel : null,
             'state'             => $lasttransfer->state ?? null,
             'limit'             => $limit ?? null,
             'daysLimit'         => $daysLimit ?? null,
@@ -84,30 +72,29 @@ class FrontendController extends Controller
     // User request a HUB Transfer
     public function store(Request $request)
     {
-        $user = User::find(Auth::id());
+        $user = User::with('airline', 'journal')->find(Auth::id());
         $settings = DB_SPSettings::first();  
 
         $request->validate([
-            'hub_request' => 'required|string',
-            'reason' => 'required|string',
+            'hub_request_id' => 'required|string',
+            'reason'         => 'required|string',
         ]);
 
-        if ($user->home_airport_id === $request->hub_request) {
+        if ($user->home_airport_id === $request->hub_request_id) {
             flash()->error('You are already assigned to this HUB.');
             return redirect(route('sptransfer.index'));
         }
 
-        $sptransfer = new DB_SPTransfer();
-        $sptransfer->hub_initial = $user->home_airport_id;
-        $sptransfer->hub_request = $request->hub_request;
-        $sptransfer->reason = $request->reason;
-        $sptransfer->user_id = Auth::id();
-        $sptransfer->state = 0;
-        $sptransfer->save();
+        $sptransfer = DB_SPTransfer::create([
+            'hub_initial_id' => $user->home_airport_id,
+            'hub_request_id' => $request->hub_request_id,
+            'reason'         => $request->reason,
+            'user_id'        => $user->id,
+            'state'          => 0,
+        ]);
 
         if ($settings->price > 0) {
-            $user = User::with('airline', 'journal')->find(Auth::id());
-            $memo = 'HUB Transfer request to ' . $sptransfer->hub_request;
+            $memo = 'HUB Transfer request to ' . $sptransfer->hub_request_id;
             $amount = Money::createFromAmount($settings->price);
             $this->ChargeForFreeFlight($user, $amount, $memo);
         }
