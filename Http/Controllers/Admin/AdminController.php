@@ -3,87 +3,57 @@
 namespace Modules\SPTransfer\Http\Controllers\Admin;
 
 use App\Contracts\Controller;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\User;
-use Modules\SPTransfer\Models\Enums\Status;
+use Laracasts\Flash\Flash;
 use Modules\SPTransfer\Models\DB_SPTransfer;
 use Modules\SPTransfer\Models\DB_SPSettings;
-use Laracasts\Flash\Flash;
+use Modules\SPTransfer\Models\Enums\Status;
+
 
 class AdminController extends Controller
 {
     // Open up the admin page and show the transfers
     public function index()
     {   
-        $requests = DB::table('sptransfer')
-        ->join('users', 'sptransfer.user_id', '=', 'users.id')
-        ->select('sptransfer.*', 'users.name as name')
-        ->orderBy('sptransfer.created_at', 'desc')
-        ->get();
-
-        $requests->transform(function ($request) {
-            if (array_key_exists($request->state, Status::$labels)) {
-                $request->statusLabel = Status::$labels[$request->state];
-            }            
-            $request->created_at = Carbon::parse($request->created_at);
-           
-            return $request;
-        });  
-
-        $settings = DB::table('sptransfer_settings')->get();
+        $requests = DB_SPTransfer::with('user')->sortable(['created_at' => 'desc'])->paginate();
+        $settings = DB_SPSettings::first();
 
         return view('sptransfer::admin.index', [
-            'requests'      => $requests, 
-            'settings'      => $settings[0],
+            'requests' => $requests, 
+            'settings' => $settings,
         ]);  
     }
 
-    // Accept the request
+    // Handle the request
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:sptransfer,id',
-        ]);
+        $sptransfer = DB_SPTransfer::find($request->id);
+        $user = User::find($request->user_id);
 
-        DB::transaction(function () use ($validated) {
-            DB_SPTransfer::where('id', $validated['id'])->update(['state' => 1]);
+        if ($sptransfer && $user && $request->decision === 'ack') {
+            // Approve Request and Update User Home Airport
+            $sptransfer->state = 1;
+            $sptransfer->save();
+            $user->home_airport_id = $sptransfer->hub_request_id;
+            $user->save();
+            flash()->success('Transfer request approved.');
+        } elseif ($sptransfer && $request->decision === 'rej') {
+            // Reject Request
+            $sptransfer->state = 2;
+            $sptransfer->save();
+            flash()->warning('Transfer request rejected.');
+        } elseif ($sptransfer && $request->decision === 'del') {
+            // Delete Request
+            $sptransfer->delete();
+            flash()->error('Transfer request deleted.');
+        } else {
+            flash()->error('Nothing done.');
+        }
 
-            $sptransfer = DB_SPTransfer::find($validated['id']);
-
-            $user = User::find($sptransfer->user_id);
-            $user->update(['home_airport_id' => $sptransfer->hub_request]);
-        });
-
-        Flash::success('Transfer request approved.');
-        return redirect(route('admin.sptransfer.index'));
-    }
-
-    // Reject the request
-    public function deny(Request $request)
-    {
-        $validated = $request->validate([
-            'id' => 'required|exists:sptransfer,id',
-        ]);
-
-        DB_SPTransfer::where('id', $validated['id'])->update(['state' => 2]);
-
-        Flash::warning('Transfer request rejected.');
-        return redirect(route('admin.sptransfer.index'));
-    }
-
-    // Delete the request
-    public function delete(Request $request)
-    {
-        $validated = $request->validate([
-            'id' => 'required|exists:sptransfer,id',
-        ]);
-
-        DB_SPTransfer::where('id', $validated['id'])->delete();
-
-        Flash::error('Transfer request deleted.');
         return redirect(route('admin.sptransfer.index'));
     }
 
