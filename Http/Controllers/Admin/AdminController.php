@@ -35,8 +35,9 @@ class AdminController extends Controller
             $user->home_airport_id = $sptransfer->hub_request_id;
             $user->save();
             flash()->success('Transfer request approved.');
-        } elseif ($sptransfer && $request->decision === 'rej') {
+        } elseif ($sptransfer && $request->decision === 'rej') {            
             // Reject Request
+            $sptransfer->reject_reason = 1;
             $sptransfer->state = 2;
             $sptransfer->save();
             flash()->warning('Transfer request rejected.');

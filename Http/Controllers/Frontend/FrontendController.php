@@ -61,6 +61,7 @@ class FrontendController extends Controller
             'spfinance'         => isset($spfinance) ? $spfinance : false,
             'spcost'            => isset($spcost) ? $spcost : 0,
             'spvalue'           => isset($spvalue) ? $spvalue : 0,
+            'reject_reason'     => isset($last_transfer->reject_reason),
         ]);
     }
 

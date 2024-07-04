@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
         $this->moduleSvc->addFrontendLink('HUB Transfer', '/sptransfer', 'fas fa-exchange-alt', $logged_in=true);
 
         // Admin links:
-        $this->moduleSvc->addAdminLink('SPTransfer', '/admin/sptransfer');
+        $this->moduleSvc->addAdminLink('SPTransfer', '/admin/sptransfer', 'pe-7s-back');
     }
 
     /**

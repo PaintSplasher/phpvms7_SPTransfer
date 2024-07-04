@@ -60,7 +60,7 @@
               </tr>
               <tr>
                 <th class="text-nowrap">@lang('SPTransfer::common.reqhub')</th>
-                <td class="text-end">{{ $lasttransfer->hub_request }}</td>
+                <td class="text-end">{{ $lasttransfer->hub_request->full_name }}</td>
               </tr>
               <tr>
                 <th class="text-nowrap">@lang('SPTransfer::common.reqdate')</th>
@@ -68,11 +68,7 @@
               </tr>
               <tr>
                 <th class="text-nowrap">@lang('SPTransfer::common.reqstatus')</th>
-                <td class="text-end">
-                  @if($status === 'Pending') <span class="badge bg-secondary text-black">{{ $status }}</span> @endif
-                  @if($status === 'Rejected') <span class="badge bg-warning text-black">{{ $status }}</span> @endif
-                  @if($status === 'Accepted') <span class="badge bg-success text-black">{{ $status }}</span> @endif
-                </td>
+                <td class="text-end">@if($status == 'Rejected') <i class="fas fa-info-circle" title="{{ $reject_reason }}"></i> @endif {{ $status }}</td>
               </tr>
               <tr>
                 <th>@lang('SPTransfer::common.reqreason')</th>

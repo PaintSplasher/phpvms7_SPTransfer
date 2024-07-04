@@ -20,6 +20,7 @@ class DB_SPTransfer extends Model
         'hub_initial_id',
         'hub_request_id',
         'reason',
+        'reject_reason',
         'state',
     ];
 
@@ -36,6 +37,7 @@ class DB_SPTransfer extends Model
         'hub_initial_id' => 'optional|max:5',
         'hub_request_id' => 'required|max:5',
         'reason'         => 'nullable',
+        'reject_reason'  => 'nullable',
         'state'          => 'nullable',
     ];
 
