@@ -6,7 +6,7 @@ phpVMS v7 module for a HUB Transfer feature
 * Minimum required phpVMS v7 version is `phpVMS 7.0.0-dev+240613.77cd59` / 13.June.2024
 
 The frontend module blade is designed for the **Original** and **Disposable Theme**.
-[Disposable Theme (By FatihKoz)](https://github.com/FatihKoz/DisposableBasic)
+[Disposable Theme (By FatihKoz)](https://github.com/FatihKoz/DisposableTheme)
 
 * If you are using the original Theme, you need nothing to do.
 * If you are using the Disposable Theme, just **rename** `/modules/SPTransfer/Resources/views/index.blade.php` to `/modules/SPTransfer/Resources/views/original_index.blade.php` **and** `/modules/SPTransfer/Resources/views/disposable_index.blade.php` to `/modules/SPTransfer/Resources/views/index.blade.php`
