@@ -31,8 +31,8 @@ class CreateSPTransferTable extends Migration
         if (!Schema::hasTable('sptransfer_settings')) {
             Schema::create('sptransfer_settings', function (Blueprint $table) {
                 $table->increments('id');
-                $table->unsignedInteger('price');
-                $table->unsignedInteger('limit');
+                $table->unsignedInteger('price')->default(0);
+                $table->unsignedInteger('limit')->default(0);
                 $table->timestamps();
             });
         }
