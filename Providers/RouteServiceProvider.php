@@ -78,8 +78,8 @@ class RouteServiceProvider extends ServiceProvider
             Route::group(['as' => 'sptransfer.', 'prefix' => 'sptransfer/'], function () {
                 Route::get('/', 'AdminController@index')->name('index');
                 Route::post('/update', 'AdminController@update')->name('update');
-                Route::post('/deny', 'AdminController@deny')->name('deny');
-                Route::post('/delete', 'AdminController@delete')->name('delete');
+                // Route::post('/deny', 'AdminController@deny')->name('deny');
+                // Route::post('/delete', 'AdminController@delete')->name('delete');
                 Route::post('/storeSettings', 'AdminController@storeSettings')->name('storeSettings');
             });
         });
