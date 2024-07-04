@@ -18,15 +18,15 @@ class CreateSPTransferTable extends Migration
     public function up()
     {
         if (!Schema::hasTable('sptransfer')) {
-        Schema::create('sptransfer', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->string('hub_initial', 5);
-            $table->string('hub_request', 5);
-            $table->timestamps();
-            $table->mediumText('reason')->nullable();
-            $table->integer('state');
-        });
+            Schema::create('sptransfer', function (Blueprint $table) {
+                $table->increments('id');
+                $table->unsignedInteger('user_id');
+                $table->string('hub_initial', 5);
+                $table->string('hub_request', 5);
+                $table->timestamps();
+                $table->mediumText('reason')->nullable();
+                $table->integer('state');
+            });
         }
 
         if (!Schema::hasTable('sptransfer_settings')) {

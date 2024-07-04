@@ -24,7 +24,7 @@ class FrontendController extends Controller
         $user = User::with('home_airport', 'journal')->find(Auth::id()); 
         $hubs = Airport::where('hub', 1)->orderby('name')->count();
         $settings = DB_SPSettings::first();  
-        $lasttransfer = DB_SPTransfer::where('user_id', $user->id)->last();
+        $lasttransfer = DB_SPTransfer::where('user_id', $user->id)->lastest();
 
         if (!$hubs) {
             flash()->error('No HUBs found.');

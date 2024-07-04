@@ -11,8 +11,8 @@ class Status extends Enum
     public const REJECTED = 2;
 
     public static array $labels = [
-        self::PENDING   => 'Pending',
-        self::ACCEPTED   => 'Accepted',
-        self::REJECTED   => 'Rejected',
+        self::PENDING  => 'Pending',
+        self::ACCEPTED => 'Accepted',
+        self::REJECTED => 'Rejected',
     ];
 }
