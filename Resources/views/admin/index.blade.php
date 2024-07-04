@@ -83,6 +83,7 @@
                       <td class="text-right">
                         <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;">
                           @csrf
+                          <input type="hidden" name="user_id" value="{{ $request->user_id }}">
                           <input type="hidden" name="id" value="{{ $request->id }}">
                           <button type="submit" name="decision" value="ack" class="btn btn-success">Approve</button>
                           <button type="submit" name="decision" value="rej" class="btn btn-warning">Reject</button>
