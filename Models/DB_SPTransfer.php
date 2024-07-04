@@ -41,11 +41,14 @@ class DB_SPTransfer extends Model
 
     // Allows sortable columns in views without performance loss
     public $sortable = [
+        'id',
         'user_id',
         'hub_initial_id',
         'hub_request_id',
         'reason',
         'state',
+        'created_at',
+        'updated_at',
     ];
 
     // User Model Relationship

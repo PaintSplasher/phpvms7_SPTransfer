@@ -52,13 +52,13 @@
                 <table class="table table-hover table-responsive" id="sptransfer">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Name</th>
+                      <th>@sortablelink('id', 'ID')</th>
+                      <th>@sortablelink('user.name', 'Name')</th>
                       <th class="text-center">Current</th>
                       <th class="text-center">Request</th>
                       <th>Reason</th>
-                      <th class="text-right">Date</th>
-                      <th class="text-right">Status</th>
+                      <th class="text-right">@sortablelink('created_at', 'Date')</th>
+                      <th class="text-right">@sortablelink('state', 'Status')</th>
                       <th class="text-right">Action</th>
                     </tr>
                   </thead>
@@ -71,15 +71,7 @@
                       <td class="text-center">{{ $request->hub_request_id }}</td>
                       <td style="word-break: break-word">{{ $request->reason }}</td>
                       <td class="text-right">{{ $request->created_at->format('d. F Y - H:i') }} UTC</td>
-                      <td class="text-right">
-                        @if($request->state === 0)
-                          <span class="label label-default">{{ $request->statusLabel }}</span>
-                        @elseif($request->state === 1)
-                          <span class="label label-success">{{ $request->statusLabel }}</span>
-                        @elseif($request->state === 2)
-                          <span class="label label-warning">{{ $request->statusLabel }}</span>
-                        @endif
-                      </td>
+                      <td class="text-right">{{ Modules\SPTransfer\Models\Enums\Status::label($request->state) }}</td>
                       <td class="text-right">
                         <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;">
                           @csrf
