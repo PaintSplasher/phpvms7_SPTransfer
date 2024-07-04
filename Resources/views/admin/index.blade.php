@@ -10,6 +10,7 @@
             <form action="{{ route('admin.sptransfer.storeSettings') }}" method="POST" >
               @csrf
               <div class="col-lg-12">
+                <input type="hidden" name="id" value="{{ $settings->id }}">
                 <span style="float:right"><button type="submit" class="btn btn-success">Save</button></span>
                 <h5>Hub Transfer Settings</h5>
                 <div class="content table-responsive table-full-width">
