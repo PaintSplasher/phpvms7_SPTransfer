@@ -16,6 +16,12 @@ class DB_SPSettings extends Model
       'sp_days',
     ];
 
+    // Better to define them here too, should follow the DB structure and code, gives an insight about stuff easily
+    public static $rules = [
+        'sp_price' => 'optional|numeric',
+        'sp_days'  => 'optional|numeric',
+    ];
+
     // Technically not needed for default fields but here for exampling purposes
     protected $casts = [
         'created_at' => 'datetime',
