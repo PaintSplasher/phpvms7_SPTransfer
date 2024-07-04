@@ -3,6 +3,7 @@
 namespace Modules\SPTransfer\Models;
 
 use App\Contracts\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Kyslik\ColumnSortable\Sortable;
 
