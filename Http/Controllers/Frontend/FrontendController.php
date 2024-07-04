@@ -33,19 +33,13 @@ class FrontendController extends Controller
 
         if ($settings->price > 0) {
             $spfinance = true;
-            $spbalance = substr($user->journal->balance->getAmount(), 0, -2);
-            $spcost = $settings->price;        
+            $spcost = $settings->price;
+            $spvalue = Money::createFromAmount($settings->price);
 
-            if ($spfinance && $spbalance < $spcost) {             
-                flash()->error('Not enough balance to perform a HUB transfer. You need ' . Money::createFromAmount($spcost) . ' to proceed.');
+            if ($user->journal->balance < $spvalue) {             
+                flash()->error('Not enough balance to perform a HUB transfer. You need ' . $spvalue . ' to proceed.');
                 return redirect(route('frontend.dashboard.index'));
             }
-
-            $spvalue = Money::createFromAmount($settings->price);
-        } else {
-            $spfinance = false;
-            $spcost = 0;
-            $spvalue = 0;
         }        
             
         if ($lasttransfer) {        
@@ -63,16 +57,16 @@ class FrontendController extends Controller
             'state'             => $lasttransfer->state ?? null,
             'limit'             => $limit ?? null,
             'daysLimit'         => $daysLimit ?? null,
-            'spfinance'         => $spfinance,
-            'spcost'            => $spcost,
-            'spvalue'           => $spvalue,
+            'spfinance'         => isset($spfinance) ? $spfinance : false,
+            'spcost'            => isset($spcost) ? $spcost : 0,
+            'spvalue'           => isset($spvalue) ? $spvalue : 0,
         ]);
     }
 
     // User request a HUB Transfer
     public function store(Request $request)
     {
-        $user = User::with('airline', 'journal')->find(Auth::id());
+        $user = User::with('airline.journal', 'journal')->find(Auth::id());
         $settings = DB_SPSettings::first();  
 
         $request->validate([
@@ -99,7 +93,7 @@ class FrontendController extends Controller
             $this->ChargeForFreeFlight($user, $amount, $memo);
         }
 
-        Log::debug('SPTransfer | Transfer from ' . strtoupper($sptransfer->hub_initial) . ' to ' . strtoupper($sptransfer->hub_request) . ' requested by ' . Auth::user()->name_private);
+        Log::debug('SPTransfer | Transfer from ' . strtoupper($sptransfer->hub_initial_id) . ' to ' . strtoupper($sptransfer->hub_request_id) . ' requested by ' . $user->name_private);
         flash()->success('Transfer request submitted.');
 
         return redirect(route('sptransfer.index'));
