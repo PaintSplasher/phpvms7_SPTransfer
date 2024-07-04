@@ -3,6 +3,7 @@
 use App\Contracts\Migration;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class CreateSPTransferTable
@@ -35,6 +36,13 @@ class CreateSPTransferTable extends Migration
                 $table->unsignedInteger('limit')->default(0);
                 $table->timestamps();
             });
+
+            DB::table('sptransfer_settings')->insert([
+                'price' => 0,
+                'limit' => 0,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
         }
     }
 
