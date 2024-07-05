@@ -74,7 +74,13 @@
                       <td style="word-break: break-word">{{ $request->reason }}</td>
                       <td class="text-right">{{ $request->created_at->format('d. F Y - H:i') }} UTC</td>
                       <td class="text-right">{{ Modules\SPTransfer\Models\Enums\Status::label($request->state) }}</td>
-                      <td class="text-right">{{ $request->reject_reason ?? '-' }}</td>
+                      <td class="text-right">
+                        @if($request->state == 0)
+                          <input type="text" class="form-control" name="rej_reason" id="rej_reason_{{ $request->id }}" maxlength="100" placeholder="Reason for the reject">
+                        @else
+                          {{ $request->reject_reason ?? '-' }}
+                        @endif
+                      </td>
                       <td class="text-right">
                         <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;">
                           @csrf
