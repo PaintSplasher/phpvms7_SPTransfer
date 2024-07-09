@@ -37,7 +37,7 @@ class AdminController extends Controller
             flash()->success('Transfer request approved.');
         } elseif ($sptransfer && $request->decision === 'rej') {            
             // Reject Request
-            $sptransfer->reject_reason = 1;
+            $sptransfer->reject_reason = $request->input('reason');
             $sptransfer->state = 2;
             $sptransfer->save();
             flash()->warning('Transfer request rejected.');

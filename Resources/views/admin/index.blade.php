@@ -74,21 +74,21 @@
                       <td style="word-break: break-word">{{ $request->reason }}</td>
                       <td class="text-right">{{ $request->created_at->format('d. F Y - H:i') }} UTC</td>
                       <td class="text-right">{{ Modules\SPTransfer\Models\Enums\Status::label($request->state) }}</td>
+                      <td class="text-right">{{ $request->reject_reason }}</td>
                       <td class="text-right">
-                        @if($request->state == 0)
-                          <input type="text" class="form-control" name="rej_reason" id="rej_reason_{{ $request->id }}" maxlength="100" placeholder="Reason for the reject">
-                        @else
-                          {{ $request->reject_reason ?? '-' }}
-                        @endif
-                      </td>
-                      <td class="text-right">
-                        <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;">
+                        <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;" class="decision-form form-inline" id="decision-form">
                           @csrf
-                          <input type="hidden" name="user_id" value="{{ $request->user_id }}">
-                          <input type="hidden" name="id" value="{{ $request->id }}">
-                          <button type="submit" name="decision" value="ack" class="btn btn-success">Approve</button>
-                          <button type="submit" name="decision" value="rej" class="btn btn-warning">Reject</button>
-                          <button type="submit" name="decision" value="del" class="btn btn-danger">Delete</button>
+                          <span id="init-buttons">
+                            <input type="hidden" name="user_id" value="{{ $request->user_id }}">
+                            <input type="hidden" name="id" value="{{ $request->id }}">
+                            <button type="submit" name="decision" value="ack" class="btn btn-success">Approve</button>
+                            <button type="button" class="btn btn-warning" id="reject-button">Reject</button>
+                            <button type="submit" name="decision" value="del" class="btn btn-danger">Delete</button>
+                          </span>
+                          <div id="reason-input" style="display:none;">
+                            <input type="text" name="reason" class="form-control" placeholder="Reason for this rejection" maxlength="50" required>
+                            <button type="submit" name="decision" value="rej" id="submit-reason" class="btn btn-warning" style="margin-top:0px;">Reject</button>
+                          </div>
                         </form>
                       </td>
                     </tr>
@@ -109,4 +109,21 @@
     </div>
   </div>
 </div>
+@endsection
+@section('scripts')
+  @parent
+  <script>
+    document.getElementById('reject-button').addEventListener('click', function(event) {
+      event.preventDefault();
+      document.getElementById('reason-input').style.display = 'block';
+      document.getElementById('init-buttons').style.display = 'none';
+    });
+    document.getElementById('submit-reason').addEventListener('click', function() {
+      if (document.getElementById('reason').value.trim() !== '') {
+        document.getElementById('decision-form').submit();
+      } else {
+        alert('Please provide a reason for rejection.');
+      }
+    });
+  </script>
 @endsection
