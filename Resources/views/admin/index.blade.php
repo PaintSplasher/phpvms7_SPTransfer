@@ -74,19 +74,23 @@
                       <td style="word-break: break-word">{{ $request->reason }}</td>
                       <td class="text-right">{{ $request->created_at->format('d. F Y - H:i') }} UTC</td>
                       <td class="text-right">{{ Modules\SPTransfer\Models\Enums\Status::label($request->state) }}</td>
-                      <td class="text-right">{{ $request->reject_reason }}</td>
+                      <td class="text-right">{{ $request->reject_reason ?? '-' }}</td>
                       <td class="text-right">
                         <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;" class="decision-form form-inline" id="decision-form">
                           @csrf
                           <span id="init-buttons">
                             <input type="hidden" name="user_id" value="{{ $request->user_id }}">
                             <input type="hidden" name="id" value="{{ $request->id }}">
-                            <button type="submit" name="decision" value="ack" class="btn btn-success">Approve</button>
-                            <button type="button" class="btn btn-warning" id="reject-button">Reject</button>
+                            @if(in_array($request->state, [0, 2]))
+                              <button type="submit" name="decision" value="ack" class="btn btn-success">Approve</button>
+                            @endif
+                            @if(in_array($request->state, [0, 1]))
+                              <button type="button" class="btn btn-warning" id="reject-button">Reject</button>
+                            @endif
                             <button type="submit" name="decision" value="del" class="btn btn-danger">Delete</button>
                           </span>
                           <div id="reason-input" style="display:none;">
-                            <input type="text" name="reason" class="form-control" placeholder="Reason for this rejection" maxlength="50" required>
+                            <input type="text" name="reason" class="form-control" placeholder="Reason for this rejection" maxlength="50">
                             <button type="submit" name="decision" value="rej" id="submit-reason" class="btn btn-warning" style="margin-top:0px;">Reject</button>
                           </div>
                         </form>
@@ -113,17 +117,33 @@
 @section('scripts')
   @parent
   <script>
-    document.getElementById('reject-button').addEventListener('click', function(event) {
-      event.preventDefault();
-      document.getElementById('reason-input').style.display = 'block';
-      document.getElementById('init-buttons').style.display = 'none';
-    });
-    document.getElementById('submit-reason').addEventListener('click', function() {
-      if (document.getElementById('reason').value.trim() !== '') {
-        document.getElementById('decision-form').submit();
-      } else {
-        alert('Please provide a reason for rejection.');
-      }
-    });
+      document.addEventListener('DOMContentLoaded', function() {
+          var rejectButton = document.getElementById('reject-button');
+          var reasonInputDiv = document.getElementById('reason-input');
+          var submitReasonButton = document.getElementById('submit-reason');
+          var decisionForm = document.getElementById('decision-form');
+
+          if (rejectButton) {
+              rejectButton.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  if (reasonInputDiv) {
+                      reasonInputDiv.style.display = 'block';
+                  }
+                  var initButtonsDiv = document.getElementById('init-buttons');
+                  if (initButtonsDiv) {
+                      initButtonsDiv.style.display = 'none';
+                  }
+              });
+          }
+          
+          if (submitReasonButton) {
+              submitReasonButton.addEventListener('click', function() {
+                  var reasonInput = document.getElementById('reason');
+                  if (reasonInput && reasonInput.value.trim() !== '') {
+                      decisionForm.submit();
+                  }
+              });
+          }
+      });
   </script>
 @endsection

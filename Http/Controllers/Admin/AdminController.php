@@ -27,17 +27,18 @@ class AdminController extends Controller
     {
         $sptransfer = DB_SPTransfer::find($request->id);
         $user = User::find($request->user_id);
-
+    
         if ($sptransfer && $user && $request->decision === 'ack') {
             // Approve Request and Update User Home Airport
+            $sptransfer->reject_reason = $request->input('reason', null);
             $sptransfer->state = 1;
             $sptransfer->save();
             $user->home_airport_id = $sptransfer->hub_request_id;
             $user->save();
             flash()->success('Transfer request approved.');
-        } elseif ($sptransfer && $request->decision === 'rej') {            
+        } elseif ($sptransfer && $request->decision === 'rej') {
             // Reject Request
-            $sptransfer->reject_reason = $request->input('reason');
+            $sptransfer->reject_reason = $request->input('reason', '-');
             $sptransfer->state = 2;
             $sptransfer->save();
             flash()->warning('Transfer request rejected.');
@@ -47,10 +48,9 @@ class AdminController extends Controller
             flash()->error('Transfer request deleted.');
         } else {
             flash()->error('Nothing done.');
-        }
-
+        }    
         return redirect(route('admin.sptransfer.index'));
-    }
+    } 
 
     // Save admin settings
     public function storeSettings(Request $request)
