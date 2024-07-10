@@ -3,35 +3,48 @@
 namespace Modules\SPTransfer\Services;
 
 use Illuminate\Support\Facades\Log;
-use League\HTMLToMarkdown\HtmlConverter;
 use Modules\SPTransfer\Models\DB_SPSettings;
 
 class NotificationServices
 {
-
     public function TransferMessage($transfer)
     {
         $setting = DB_SPSettings::first();
-        $wh_url = $setting ? $setting->discord_url : null;
+        $wh_url = filled($setting) ? $setting->discord_url : null;
 
         $json_data = json_encode([
             // Plain text message
-            'username' => 'SPTransfer' : config('app.name'),
+            'username' => 'Notifications For ' . config('app.name'),
             'tts'      => false,
             'embeds'   => [
                 // Embed content
                 [
-                    'type'        => 'rich',
-                    'color'       => hexdec('2980B9'),
-                    'title'       => 'HUB Transfer Request',
-                    'thumbnail'   => [
+                    'title'     => '**New Hub Change Request**',
+                    'type'      => 'rich',
+                    'timestamp' => date('c', strtotime($transfer->created_at)),
+                    'color'     => hexdec('79D35E'),
+                    'thumbnail' => [
                         'url' => !empty($transfer->user->avatar) ? $transfer->user->avatar->url : $transfer->user->gravatar(256),
                     ],
-                    'description' => (new HtmlConverter(['header_style' => 'atx']))->convert($transfer->body),
-                    'timestamp'   => date('c', strtotime($transfer->created_at)),
-                    'author'      => [
-                        'name' => 'Published By: ' . $transfer->user->name_private,
-                        'url'  => route('frontend.profile.show', [$transfer->user->id]),
+                    'author'    => [
+                        'name' => $transfer->user->name_private,
+                        'url'  => route('frontend.profile.show', [$transfer->user_id]),
+                    ],
+                    // Additional embed fields (Discord displays max 3 items per row)
+                    'fields' => [
+                        [
+                            'name'   => '__Current__',
+                            'value'  => $transfer->hub_initial_id,
+                            'inline' => true
+                        ], [
+                            'name'   => '__Requested__',
+                            'value'  => $transfer->hub_request_id,
+                            'inline' => true
+                        ], [
+                            'name'   => '__Reason__',
+                            'value'  => $transfer->reason,
+                            'inline' => true
+                        ],
                     ],
                 ],
             ]
@@ -55,5 +68,4 @@ class NotificationServices
         }
         curl_close($ch);
     }
-
 }
