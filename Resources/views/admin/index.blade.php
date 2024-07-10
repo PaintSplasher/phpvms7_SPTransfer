@@ -35,6 +35,15 @@
                             <input type="number" class="form-control" name="sp_days" step="1" min="0" max="1000" placeholder="0" value="{{ $settings->limit }}">
                           </td>
                         </tr>
+                        <tr>
+                          <td>
+                            <p>Discord Private Webhook URL</p>
+                            <p style="float:left; margin-right: 10px; margin-left: 2px;"><i class="fas fa-info-circle text-primary"></i> The Discord Webhook URL for private notifications</p>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" name="sp_discordurl" value="{{ $settings->discord_url }}">
+                          </td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>

@@ -60,12 +60,14 @@ class AdminController extends Controller
         if ($settings) {
             $settings->price = $request->sp_price;
             $settings->limit = $request->sp_days;
+            $settings->discord_url = $request->sp_discordurl;
             $settings->save();
             flash()->success('Settings saved.');
         } else {
             DB_SPSettings::create([
-                'price'      => $request->sp_price,
-                'limit'      => $request->sp_days,
+                'price'       => $request->sp_price,
+                'limit'       => $request->sp_days,
+                'discord_url' => $request->sp_discordurl,
             ]);
             flash()->success('Initial settings created.');
         }
