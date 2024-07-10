@@ -4,7 +4,7 @@ namespace Modules\SPTransfer\Services;
 
 use Illuminate\Support\Facades\Log;
 use League\HTMLToMarkdown\HtmlConverter;
-use App\Models\DB_SPSettings;
+use Modules\SPTransfer\Models\DB_SPSettings;
 
 class NotificationServices
 {
