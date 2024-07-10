@@ -90,10 +90,8 @@
                           <span id="init-buttons">
                             <input type="hidden" name="user_id" value="{{ $request->user_id }}">
                             <input type="hidden" name="id" value="{{ $request->id }}">
-                            @if(in_array($request->state, [0, 2]))
+                            @if($request->state === 0)
                               <button type="submit" name="decision" value="ack" class="btn btn-success">Approve</button>
-                            @endif
-                            @if(in_array($request->state, [0, 1]))
                               <button type="button" class="btn btn-warning" id="reject-button">Reject</button>
                             @endif
                             <button type="submit" name="decision" value="del" class="btn btn-danger">Delete</button>
