@@ -1,4 +1,4 @@
-# SPTransfer v1.1
+# SPTransfer v1.2
 
 phpVMS v7 module for a HUB Transfer feature
 
@@ -40,6 +40,13 @@ Do **not** remove the Link that is visible in your admin center. Feel free to pu
 Please use the GitHub [issue](https://github.com/PaintSplasher/phpvms7_SPTransfer/issues) tracker.
 
 ## Release / Update Notes
+
+11.July.24
+* Added discord notification
+* Added reject reason
+* Added sortable table
+* Source code optimizations
+* StyleFixes
 
 04.JULY.24
 * Initial Release

@@ -14,7 +14,7 @@ class NotificationServices
 
         $json_data = json_encode([
             // Plain text message
-            'username' => 'Notifications For ' . config('app.name'),
+            'username' => 'Notification for ' . config('app.name'),
             'tts'      => false,
             'embeds'   => [
                 // Embed content
@@ -22,7 +22,7 @@ class NotificationServices
                     'title'     => '**New Hub Change Request**',
                     'type'      => 'rich',
                     'timestamp' => date('c', strtotime($transfer->created_at)),
-                    'color'     => hexdec('79D35E'),
+                    'color'     => hexdec('2980B9'),
                     'thumbnail' => [
                         'url' => !empty($transfer->user->avatar) ? $transfer->user->avatar->url : $transfer->user->gravatar(256),
                     ],
