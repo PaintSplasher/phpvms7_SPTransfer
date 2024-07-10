@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Modules\SPTransfer\Events\HubChangeRequest;
 use Modules\SPTransfer\Models\DB_SPTransfer;
 use Modules\SPTransfer\Models\DB_SPSettings;
 use Modules\SPTransfer\Models\Enums\Status;
@@ -20,9 +21,9 @@ class FrontendController extends Controller
     // Open up the index page and provide information
     public function index()
     {
-        $user = User::with('home_airport', 'journal')->find(Auth::id()); 
+        $user = User::with('home_airport', 'journal')->find(Auth::id());
         $hubs = Airport::where('hub', 1)->orderby('name')->count();
-        $settings = DB_SPSettings::first();  
+        $settings = DB_SPSettings::first();
         $last_transfer = DB_SPTransfer::where('user_id', $user->id)->latest()->first();
 
         // dd($lasttransfer);
@@ -30,20 +31,20 @@ class FrontendController extends Controller
         if (!$hubs) {
             flash()->error('No HUBs found.');
             return redirect(route('frontend.dashboard.index'));
-        }    
+        }
 
         if ($settings->price > 0) {
             $spfinance = true;
             $spcost = $settings->price;
             $spvalue = Money::createFromAmount($settings->price);
 
-            if ($user->journal->balance < $spvalue) {             
+            if ($user->journal->balance < $spvalue) {
                 flash()->error('Not enough balance to perform a HUB transfer. You need ' . $spvalue . ' to proceed.');
                 return redirect(route('frontend.dashboard.index'));
             }
-        }        
-            
-        if ($last_transfer) {        
+        }
+
+        if ($last_transfer) {
             $statusLabel = filled($last_transfer->state) ? Status::label($last_transfer->state) : null;
             $daysLimit = filled($settings->limit) ? $settings->limit : 0;
             $limit = ($last_transfer->created_at > Carbon::now()->subDays($daysLimit)) ? 1 : 0;
@@ -69,7 +70,7 @@ class FrontendController extends Controller
     public function store(Request $request)
     {
         $user = User::with('airline.journal', 'journal')->find(Auth::id());
-        $settings = DB_SPSettings::first();  
+        $settings = DB_SPSettings::first();
 
         $request->validate([
             'hub_request_id' => 'required|string',
@@ -96,6 +97,9 @@ class FrontendController extends Controller
         }
 
         Log::debug('SPTransfer | Transfer from ' . strtoupper($sptransfer->hub_initial_id) . ' to ' . strtoupper($sptransfer->hub_request_id) . ' requested by ' . $user->name_private);
+
+        event(new HubChangeRequest($sptransfer));
+
         flash()->success('Transfer request submitted.');
 
         return redirect(route('sptransfer.index'));
@@ -132,5 +136,3 @@ class FrontendController extends Controller
         Log::debug('SPTransfer | UserID: ' . $user->id . ' Name: ' . $user->name_private . ' charged for ' . $memo);
     }
 }
-
-

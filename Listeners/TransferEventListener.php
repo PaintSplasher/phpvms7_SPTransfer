@@ -2,22 +2,17 @@
 
 namespace Modules\SPTransfer\Listeners;
 
-use App\Events\TransferEvent;
+use Illuminate\Support\Facades\Log;
+use Modules\SPTransfer\Events\HubChangeRequest;
 use Modules\SPTransfer\Services\NotificationServices;
 
-/**
- * A sample event listener
- */
-class TransferEventListener
+class HubChangeRequestListener
 {
-    public function handle(TransferEvent $event) {
-        $transfer = $event->transfer;
-        $transfer->loadMissing('user');
+    public function handle(HubChangeRequest $event) {
 
-        if (DB_Setting('dbasic.discord_newsmsg', true)) {
-            // Send Discord Notification
-            $NotificationSvc = app(NotificationServices::class);
-            $NotificationSvc->NewsMessage($transfer);
-        }
+        $transfer = $event->transfer;
+        // $transfer->loadMissing('user');
+
+        Log::debug('Hub Transfer Event Listener working');
     }
 }
