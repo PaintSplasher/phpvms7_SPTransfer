@@ -7,9 +7,10 @@
       <div class="card border-blue-bottom">
         <div class="content">
           <div class="row">
-            <form method="POST" action="{{ route('admin.sptransfer.storeSettings') }}">
+            <form action="{{ route('admin.sptransfer.storeSettings') }}" method="POST" >
               @csrf
               <div class="col-lg-12">
+                <input type="hidden" name="id" value="{{ $settings->id }}">
                 <span style="float:right"><button type="submit" class="btn btn-success">Save</button></span>
                 <h5>Hub Transfer Settings</h5>
                 <div class="content table-responsive table-full-width">
@@ -22,7 +23,7 @@
                             <p style="float:left; margin-right: 10px; margin-left: 2px;"><i class="fas fa-info-circle text-primary"></i> The amount the pilot gets charged for every request (0 = disabled)</p>
                           </td>
                           <td>
-                            <input type="number" class="form-control" name="sp_price" step="1" min="0" max="100000" placeholder="0" value="{{ $settings->price ?? '0' }}">
+                            <input type="number" class="form-control" name="sp_price" step="1" min="0" max="100000" placeholder="0" value="{{ $settings->price }}">
                           </td>
                         </tr>
                         <tr>
@@ -31,7 +32,16 @@
                             <p style="float:left; margin-right: 10px; margin-left: 2px;"><i class="fas fa-info-circle text-primary"></i> The limit in days the pilot has to wait until he can make another request (0 = disabled)</p>
                           </td>
                           <td>
-                            <input type="number" class="form-control" name="sp_days" step="1" min="0" max="1000" placeholder="0" value="{{ $settings->limit ?? '0' }}">
+                            <input type="number" class="form-control" name="sp_days" step="1" min="0" max="1000" placeholder="0" value="{{ $settings->limit }}">
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <p>Discord Private Webhook URL</p>
+                            <p style="float:left; margin-right: 10px; margin-left: 2px;"><i class="fas fa-info-circle text-primary"></i> The Discord Webhook URL for private notifications</p>
+                          </td>
+                          <td>
+                            <input type="text" class="form-control" name="sp_discordurl" value="{{ $settings->discord_url }}">
                           </td>
                         </tr>
                       </tbody>
@@ -52,13 +62,14 @@
                 <table class="table table-hover table-responsive" id="sptransfer">
                   <thead>
                     <tr>
-                      <th>ID</th>
-                      <th>Name</th>
+                      <th>@sortablelink('id', 'ID')</th>
+                      <th>@sortablelink('user.name', 'Name')</th>
                       <th class="text-center">Current</th>
                       <th class="text-center">Request</th>
-                      <th>Reason</th>
-                      <th class="text-right">Date</th>
-                      <th class="text-right">Status</th>
+                      <th>Transfer Reason</th>
+                      <th class="text-right">@sortablelink('created_at', 'Date')</th>
+                      <th class="text-right">@sortablelink('state', 'Status')</th>
+                      <th class="text-right">Reject Reason</th>
                       <th class="text-right">Action</th>
                     </tr>
                   </thead>
@@ -66,35 +77,29 @@
                     @foreach($requests as $request)
                     <tr>
                       <td>{{ $request->id }}</td>
-                      <td><a href="{{ route('admin.users.edit', [$request->user_id]) }}">{{ $request->name }}</a></td>
-                      <td class="text-center">{{ $request->hub_initial }}</td>
-                      <td class="text-center">{{ $request->hub_request }}</td>
+                      <td><a href="{{ route('admin.users.edit', [$request->user_id]) }}">{{ $request->user->name }}</a></td>
+                      <td class="text-center">{{ $request->hub_initial_id }}</td>
+                      <td class="text-center">{{ $request->hub_request_id }}</td>
                       <td style="word-break: break-word">{{ $request->reason }}</td>
                       <td class="text-right">{{ $request->created_at->format('d. F Y - H:i') }} UTC</td>
+                      <td class="text-right">{{ Modules\SPTransfer\Models\Enums\Status::label($request->state) }}</td>
+                      <td class="text-right">{{ $request->reject_reason ?? '-' }}</td>
                       <td class="text-right">
-                        @if($request->state === 0)
-                        <span class="label label-default">{{ $request->statusLabel }}</span>
-                        @elseif($request->state === 1)
-                        <span class="label label-success">{{ $request->statusLabel }}</span>
-                        @elseif($request->state === 2)
-                        <span class="label label-warning">{{ $request->statusLabel }}</span>
-                        @endif
-                      </td>
-                      <td class="text-right">
-                        <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;">
+                        <form method="POST" action="{{ route('admin.sptransfer.update') }}" style="display:inline;" class="decision-form form-inline" id="decision-form">
                           @csrf
-                          <input type="hidden" name="id" value="{{ $request->id }}">
-                          <button type="submit" class="btn btn-success">Approve</button>
-                        </form>
-                        <form method="POST" action="{{ route('admin.sptransfer.deny') }}" style="display:inline;">
-                          @csrf
-                          <input type="hidden" name="id" value="{{ $request->id }}">
-                          <button type="submit" class="btn btn-warning">Reject</button>
-                        </form>
-                        <form action="{{ route('admin.sptransfer.delete') }}" method="POST" style="display:inline;">
-                          @csrf
-                          <input type="hidden" name="id" value="{{ $request->id }}">
-                          <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
+                          <span id="init-buttons">
+                            <input type="hidden" name="user_id" value="{{ $request->user_id }}">
+                            <input type="hidden" name="id" value="{{ $request->id }}">
+                            @if($request->state === 0)
+                              <button type="submit" name="decision" value="ack" class="btn btn-success">Approve</button>
+                              <button type="button" class="btn btn-warning" id="reject-button">Reject</button>
+                            @endif
+                            <button type="submit" name="decision" value="del" class="btn btn-danger">Delete</button>
+                          </span>
+                          <div id="reason-input" style="display:none;">
+                            <input type="text" name="reason" class="form-control" placeholder="Reason for this rejection" maxlength="50">
+                            <button type="submit" name="decision" value="rej" id="submit-reason" class="btn btn-warning" style="margin-top:0px;">Reject</button>
+                          </div>
                         </form>
                       </td>
                     </tr>
@@ -105,16 +110,47 @@
             </div>
           </div>
         </div>
-        {{-- TODO
         <div class="row">
           <div class="col-12 text-center">
             {{ $requests->withQueryString()->links('admin.pagination.default') }}
           </div>
         </div>
-        --}}
       </div>
       <p class="text-center">Crafted with <i class="fas fa-heart text-danger"></i> by <a href="https://github.com/PaintSplasher/phpvms7_sptransfer" target="_blank">Sass-Projects</p>
     </div>
   </div>
 </div>
+@endsection
+@section('scripts')
+  @parent
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          var rejectButton = document.getElementById('reject-button');
+          var reasonInputDiv = document.getElementById('reason-input');
+          var submitReasonButton = document.getElementById('submit-reason');
+          var decisionForm = document.getElementById('decision-form');
+
+          if (rejectButton) {
+              rejectButton.addEventListener('click', function(event) {
+                  event.preventDefault();
+                  if (reasonInputDiv) {
+                      reasonInputDiv.style.display = 'block';
+                  }
+                  var initButtonsDiv = document.getElementById('init-buttons');
+                  if (initButtonsDiv) {
+                      initButtonsDiv.style.display = 'none';
+                  }
+              });
+          }
+          
+          if (submitReasonButton) {
+              submitReasonButton.addEventListener('click', function() {
+                  var reasonInput = document.getElementById('reason');
+                  if (reasonInput && reasonInput.value.trim() !== '') {
+                      decisionForm.submit();
+                  }
+              });
+          }
+      });
+  </script>
 @endsection

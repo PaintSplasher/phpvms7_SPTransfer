@@ -12,7 +12,24 @@ class DB_SPSettings extends Model
     protected $table = 'sptransfer_settings';
 
     protected $fillable = [
-      'sp_price',
-      'sp_days',
+        'sp_price',
+        'sp_days',
+        'discord_url',
+    ];
+
+    // Better to define them here too, should follow the DB structure and code, gives an insight about stuff easily
+    public static $rules = [
+        'sp_price'    => 'optional|numeric',
+        'sp_days'     => 'optional|numeric',
+        'discord_url' => 'nullable|string|max:191',
+    ];
+
+    // Technically not needed for default fields but here for exampling purposes
+    protected $casts = [
+        'sp_price'    => 'float',
+        'sp_days'     => 'integer',
+        'discord_url' => 'string',
+        'created_at'  => 'datetime',
+        'updated_at'  => 'datetime',
     ];
 }
