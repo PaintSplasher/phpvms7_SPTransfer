@@ -68,7 +68,7 @@
               </tr>
               <tr>
                 <th class="text-nowrap">@lang('SPTransfer::common.reqstatus')</th>
-                <td class="text-end">@if($status == 'Rejected') <i class="fas fa-info-circle" title="{{ $reject_reason }}"></i> @endif {{ $status }}</td>
+                <td class="text-end">{{ $status }}@if($status == 'Rejected'): {{ $lasttransfer->reject_reason ?? '-' }} @endif </td>
               </tr>
               <tr>
                 <th>@lang('SPTransfer::common.reqreason')</th>
