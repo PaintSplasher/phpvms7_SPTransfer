@@ -15,6 +15,7 @@ class DB_SPSettings extends Model
         'sp_price',
         'sp_days',
         'discord_url',
+        'charge_type',
     ];
 
     // Better to define them here too, should follow the DB structure and code, gives an insight about stuff easily
@@ -22,6 +23,7 @@ class DB_SPSettings extends Model
         'sp_price'    => 'optional|numeric',
         'sp_days'     => 'optional|numeric',
         'discord_url' => 'nullable|string|max:191',
+        'charge_type' => 'optional|numeric',
     ];
 
     // Technically not needed for default fields but here for exampling purposes
@@ -31,5 +33,6 @@ class DB_SPSettings extends Model
         'discord_url' => 'string',
         'created_at'  => 'datetime',
         'updated_at'  => 'datetime',
+        'charge_type' => 'integer',
     ];
 }

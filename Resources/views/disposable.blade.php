@@ -34,11 +34,15 @@
           @endif
         @endif
       </div>
-      @if($spfinance)
-        <div class="card-footer p-0 px-1 small fw-bold text-end">
-          <i class="fas fa-money-bill-wave text-danger float-start m-1" aria-hidden="true"></i> @lang('SPTransfer::common.charged') {{ $spvalue }} @lang('SPTransfer::common.transfer').        
-        </div>
-      @endif 
+      <div class="card-footer p-0 px-1 small fw-bold text-end">
+        @if($spfinance)
+          @if($charge_type === 0)
+            <i class="fas fa-money-bill-wave text-danger float-start m-1" aria-hidden="true"></i> @lang('SPTransfer::common.charged') {{ $spvalue }} @lang('SPTransfer::common.onrequest').
+          @else
+            <i class="fas fa-money-bill-wave text-danger float-start m-1" aria-hidden="true"></i> @lang('SPTransfer::common.charged') {{ $spvalue }} @lang('SPTransfer::common.ontransfer').
+          @endif                
+        @endif
+      </div>
     </div>
   </div>
   <div class="col-sm-4">

@@ -25,7 +25,13 @@
                 <div>@lang('SPTransfer::common.reason')</div>
                 <textarea name="reason" id="reason" class="form-control" maxlength="100" placeholder="@lang('SPTransfer::common.chars')" required></textarea>
               </div>
-              @if($spfinance) <p class="float-left text-muted mt-3">@lang('SPTransfer::common.charged') {{ $spvalue }} @lang('SPTransfer::common.transfer').</p> @endif
+              @if($spfinance)
+                @if($charge_type === 0)
+                  <p class="float-left text-muted mt-3">@lang('SPTransfer::common.charged') {{ $spvalue }} @lang('SPTransfer::common.onrequest').</p>
+                @else
+                  <p class="float-left text-muted mt-3">@lang('SPTransfer::common.charged') {{ $spvalue }} @lang('SPTransfer::common.ontransfer').</p>
+                @endif                
+              @endif
               <button type="submit" class="btn btn-outline-info pull-right btn-lg">@lang('SPTransfer::common.request')</button>
             </form>
           @endif

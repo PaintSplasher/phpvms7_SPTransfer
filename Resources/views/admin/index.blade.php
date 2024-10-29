@@ -28,6 +28,18 @@
                         </tr>
                         <tr>
                           <td>
+                            <p>Type of charge</p>
+                            <p style="float:left; margin-right: 10px; margin-left: 2px;"><i class="fas fa-info-circle text-primary"></i> This option does not have any impact if your price per request is disabled</p>
+                          </td>
+                          <td align="center">
+                            <select class="select2" name="sp_charge" style="width: 100%;">
+                              <option value="0" {{ $settings->charge_type == 0 ? 'selected' : '' }}>Charge for every request</option>
+                              <option value="1" {{ $settings->charge_type == 1 ? 'selected' : '' }}>Charge only on approval</option>
+                          </select>                          
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
                             <p>Limit per request</p>
                             <p style="float:left; margin-right: 10px; margin-left: 2px;"><i class="fas fa-info-circle text-primary"></i> The limit in days the pilot has to wait until he can make another request (0 = disabled)</p>
                           </td>

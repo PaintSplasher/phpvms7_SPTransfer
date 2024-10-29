@@ -63,6 +63,7 @@ class FrontendController extends Controller
             'spcost'            => isset($spcost) ? $spcost : 0,
             'spvalue'           => isset($spvalue) ? $spvalue : 0,
             'reject_reason'     => isset($last_transfer->reject_reason),
+            'charge_type'       => $settings->charge_type,
         ]);
     }
 
@@ -91,9 +92,13 @@ class FrontendController extends Controller
         ]);
 
         if ($settings->price > 0) {
-            $memo = 'HUB Transfer request to ' . $sptransfer->hub_request_id;
-            $amount = Money::createFromAmount($settings->price);
-            $this->ChargeForFreeFlight($user, $amount, $memo);
+            if ($settings->charge_type === 0) {
+                $memo = 'HUB Transfer request to ' . $sptransfer->hub_request_id;
+                $amount = Money::createFromAmount($settings->price);
+                $this->ChargeForFreeFlight($user, $amount, $memo);
+            } else {
+                $memo = 'HUB Transfer request to ' . $sptransfer->hub_request_id;
+            }
         }
 
         Log::debug('SPTransfer | Transfer from ' . strtoupper($sptransfer->hub_initial_id) . ' to ' . strtoupper($sptransfer->hub_request_id) . ' requested by ' . $user->name_private);
@@ -133,6 +138,6 @@ class FrontendController extends Controller
         );
 
         // Note Transaction
-        Log::debug('SPTransfer | UserID: ' . $user->id . ' Name: ' . $user->name_private . ' charged for ' . $memo);
+        Log::debug('SPTransfer | UserID: ' . $user->id . ' Name: ' . $user->name_private . ' charged for ' . $memo . ' on request.');
     }
 }
