@@ -27,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Uncomment this if you have migrations
         $this->loadMigrationsFrom(__DIR__ . '/../Database/migrations');
+        
+        // Register the widget namespace
+        app('arrilot.widget-namespaces')->registerNamespace('SPTransfer', 'Modules\SPTransfer\Widgets');
     }
 
     /**
@@ -79,6 +82,9 @@ class AppServiceProvider extends ServiceProvider
 
             return null;
         }, \Config::get('view.paths'))), [$sourcePath]), 'sptransfer');
+        
+        // Register the views namespace
+        $this->loadViewsFrom($sourcePath, 'SPTransfer');
     }
 
     /**
