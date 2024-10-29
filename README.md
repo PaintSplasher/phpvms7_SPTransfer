@@ -1,4 +1,4 @@
-# SPTransfer v1.2
+# SPTransfer v1.3
 
 phpVMS v7 module for a HUB Transfer feature
 
@@ -32,6 +32,14 @@ _Make sure the name of the folder you upload is **SPTransfer**._
 * Go to admin > dashboard (or /update) to trigger module migrations
 * When migration is completed, go to admin > maintenance and clean `application` cache
 
+## Admin Widget
+
+You now have the opportunity to add a widget to your admin area that will show you all pending transfer requests. To add the widget to your admin area please follow the instructions.
+
+* Open the file `/resources/views/admin/dashboard/index.blade.php`
+* Add `@widget('SPTransfer::infobox')` after ``@endcomponent (Line 30)``
+* Close and save the file
+
 ## License Compatibility & Attribution Link
 
 Do **not** remove the Link that is visible in your admin center. Feel free to publish a link on your public pages if you want to.
@@ -40,6 +48,10 @@ Do **not** remove the Link that is visible in your admin center. Feel free to pu
 Please use the GitHub [issue](https://github.com/PaintSplasher/phpvms7_SPTransfer/issues) tracker.
 
 ## Release / Update Notes
+
+29.October.24
+* Added an option for different charge types
+* Added a widget for showing pending requests
 
 11.July.24
 * Added discord notification
