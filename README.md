@@ -40,6 +40,8 @@ You now have the opportunity to add a widget to your admin area that will show y
 * Add `@widget('SPTransfer::infobox')` after ``@endcomponent (row 30)``
 * Close and save the file
 
+![hub_transfer_pending_admin](https://github.com/user-attachments/assets/cfabdd11-80a7-48bc-8288-da07a8ad010a)
+
 ## License Compatibility & Attribution Link
 
 Do **not** remove the Link that is visible in your admin center. Feel free to publish a link on your public pages if you want to.
