@@ -37,7 +37,7 @@ _Make sure the name of the folder you upload is **SPTransfer**._
 You now have the opportunity to add a widget to your admin area that will show you all pending transfer requests. To add the widget to your admin area please follow the instructions.
 
 * Open the file `/resources/views/admin/dashboard/index.blade.php`
-* Add `@widget('SPTransfer::infobox')` after ``@endcomponent (row 30)``
+* Add `@widget('SPTransfer::InfoBox')` after ``@endcomponent (row 30)``
 * Close and save the file
 
 ![hub_transfer_pending_admin](https://github.com/user-attachments/assets/cfabdd11-80a7-48bc-8288-da07a8ad010a)
