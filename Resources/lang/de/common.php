@@ -22,5 +22,5 @@ return [
     'reqis'     => 'Deine Anfrage ist',
     'reqform'   => 'Transfer Formular',
     'chars'     => 'Maximal 100 Zeichen',
-    'notenough' => 'Not enough balance to perform a HUB transfer. You nee',
+    'notenough' => 'Du besitzt nicht ausreichend Geld um einen Transfer zu bezahlen. Die Kosten betragen',
 ];

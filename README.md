@@ -32,6 +32,10 @@ _Make sure the name of the folder you upload is **SPTransfer**._
 * Go to admin > dashboard (or /update) to trigger module migrations
 * When migration is completed, go to admin > maintenance and clean `application` cache
 
+## Link removal
+
+You can remove the link from your main menu by adding ``//`` in front of row 49 in your ``Providers/AppServiceProvider.php`` file.
+
 ## Admin Widget
 
 You now have the opportunity to add a widget to your admin area that will show you all pending transfer requests. To add the widget to your admin area please follow the instructions.

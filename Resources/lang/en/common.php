@@ -22,5 +22,5 @@ return [
     'reqis'     => 'Your request is',
     'reqform'   => 'Request Form',
     'chars'     => 'maximal 100 characters',
-    'notenough' => 'Not enough balance to perform a HUB transfer. You nee',
+    'notenough' => 'Not enough balance to perform a HUB transfer. You need',
 ];
