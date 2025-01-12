@@ -8,9 +8,9 @@ use App\Services\FinanceService;
 use App\Support\Money;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Modules\SPTransfer\Models\DB_SPTransfer;
-use Modules\SPTransfer\Models\DB_SPSettings;
 use Illuminate\Support\Facades\Log;
+use Modules\SPTransfer\Models\DB_SPSettings;
+use Modules\SPTransfer\Models\DB_SPTransfer;
 
 class AdminController extends Controller
 {
@@ -31,13 +31,13 @@ class AdminController extends Controller
     {
         $sptransfer = DB_SPTransfer::find($request->id);
         $user = User::find($request->user_id);
-    
+
         if ($sptransfer && $user && $request->decision === 'ack') {
             // Approve Request and Update User Home Airport
             $settings = DB_SPSettings::first();
 
             if ($settings->charge_type === 1 && $settings->price > 0) {
-                $memo = 'HUB Transfer request to ' . $sptransfer->hub_request_id;
+                $memo = 'HUB Transfer request to '.$sptransfer->hub_request_id;
                 $amount = Money::createFromAmount($settings->price);
                 $this->ChargeForFreeFlight($user, $amount, $memo);
             }
@@ -50,7 +50,7 @@ class AdminController extends Controller
             flash()->success('Transfer request approved.');
         } elseif ($sptransfer && $request->decision === 'rej') {
             // Reject Request
-            $sptransfer->state = 2;          
+            $sptransfer->state = 2;
             $sptransfer->reject_reason = $request->input('reason', '-');
             $sptransfer->save();
             flash()->warning('Transfer request rejected.');
@@ -60,9 +60,10 @@ class AdminController extends Controller
             flash()->error('Transfer request deleted.');
         } else {
             flash()->error('Nothing done.');
-        }    
+        }
+
         return redirect(route('admin.sptransfer.index'));
-    } 
+    }
 
     // Save admin settings
     public function storeSettings(Request $request)
@@ -93,7 +94,7 @@ class AdminController extends Controller
     public function ChargeForFreeFlight($user, $amount, $memo)
     {
         $financeSvc = app(FinanceService::class);
-    
+
         // Charge User
         $financeSvc->debitFromJournal(
             $user->journal,
@@ -104,20 +105,19 @@ class AdminController extends Controller
             'sptransfer',
             Carbon::now()->format('Y-m-d')
         );
-    
+
         // Credit Airline
         $financeSvc->creditToJournal(
             $user->airline->journal,
             $amount,
             $user,
-            $memo . ' UserID:' . $user->id,
+            $memo.' UserID:'.$user->id,
             'HUB Transfer Fees',
             'sptransfer',
             Carbon::now()->format('Y-m-d')
         );
-    
+
         // Note Transaction
-        Log::debug('SPTransfer | UserID: ' . $user->id . ' Name: ' . $user->name_private . ' charged for ' . $memo . ' by approval.');
+        Log::debug('SPTransfer | UserID: '.$user->id.' Name: '.$user->name_private.' charged for '.$memo.' by approval.');
     }
-    
 }

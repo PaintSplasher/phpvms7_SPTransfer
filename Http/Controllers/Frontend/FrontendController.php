@@ -12,8 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Modules\SPTransfer\Events\HubChangeRequest;
-use Modules\SPTransfer\Models\DB_SPTransfer;
 use Modules\SPTransfer\Models\DB_SPSettings;
+use Modules\SPTransfer\Models\DB_SPTransfer;
 use Modules\SPTransfer\Models\Enums\Status;
 
 class FrontendController extends Controller
@@ -30,6 +30,7 @@ class FrontendController extends Controller
 
         if (!$hubs) {
             flash()->error('No HUBs found.');
+
             return redirect(route('frontend.dashboard.index'));
         }
 
@@ -39,7 +40,8 @@ class FrontendController extends Controller
             $spvalue = Money::createFromAmount($settings->price);
 
             if ($user->journal->balance < $spvalue) {
-                flash()->error('Not enough balance to perform a HUB transfer. You need ' . $spvalue . ' to proceed.');
+                flash()->error('Not enough balance to perform a HUB transfer. You need '.$spvalue.' to proceed.');
+
                 return redirect(route('frontend.dashboard.index'));
             }
         }
@@ -80,6 +82,7 @@ class FrontendController extends Controller
 
         if ($user->home_airport_id === $request->hub_request_id) {
             flash()->error('You are already assigned to this HUB.');
+
             return redirect(route('sptransfer.index'));
         }
 
@@ -93,15 +96,15 @@ class FrontendController extends Controller
 
         if ($settings->price > 0) {
             if ($settings->charge_type === 0) {
-                $memo = 'HUB Transfer request to ' . $sptransfer->hub_request_id;
+                $memo = 'HUB Transfer request to '.$sptransfer->hub_request_id;
                 $amount = Money::createFromAmount($settings->price);
                 $this->ChargeForFreeFlight($user, $amount, $memo);
             } else {
-                $memo = 'HUB Transfer request to ' . $sptransfer->hub_request_id;
+                $memo = 'HUB Transfer request to '.$sptransfer->hub_request_id;
             }
         }
 
-        Log::debug('SPTransfer | Transfer from ' . strtoupper($sptransfer->hub_initial_id) . ' to ' . strtoupper($sptransfer->hub_request_id) . ' requested by ' . $user->name_private);
+        Log::debug('SPTransfer | Transfer from '.strtoupper($sptransfer->hub_initial_id).' to '.strtoupper($sptransfer->hub_request_id).' requested by '.$user->name_private);
 
         event(new HubChangeRequest($sptransfer));
 
@@ -131,13 +134,13 @@ class FrontendController extends Controller
             $user->airline->journal,
             $amount,
             $user,
-            $memo . ' UserID:' . $user->id,
+            $memo.' UserID:'.$user->id,
             'HUB Transfer Fees',
             'sptransfer',
             Carbon::now()->format('Y-m-d')
         );
 
         // Note Transaction
-        Log::debug('SPTransfer | UserID: ' . $user->id . ' Name: ' . $user->name_private . ' charged for ' . $memo . ' on request.');
+        Log::debug('SPTransfer | UserID: '.$user->id.' Name: '.$user->name_private.' charged for '.$memo.' on request.');
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
 use App\Contracts\Migration;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 /**
- * Class CreateSPTransferTable
+ * Class CreateSPTransferTable.
  */
 class CreateSPTransferTable extends Migration
 {
@@ -38,10 +38,10 @@ class CreateSPTransferTable extends Migration
             });
 
             DB::table('sptransfer_settings')->insert([
-                'price' => 0,
-                'limit' => 0,
+                'price'      => 0,
+                'limit'      => 0,
                 'created_at' => now(),
-                'updated_at' => now()
+                'updated_at' => now(),
             ]);
         }
     }

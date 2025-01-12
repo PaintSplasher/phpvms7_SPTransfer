@@ -11,7 +11,8 @@ use Kyslik\ColumnSortable\Sortable;
 
 class DB_SPTransfer extends Model
 {
-    use HasFactory, Sortable;
+    use HasFactory;
+    use Sortable;
 
     protected $table = 'sptransfer';
 
