@@ -4,9 +4,6 @@ namespace Modules\SPTransfer\Providers;
 
 use App\Contracts\Modules\ServiceProvider;
 
-/**
- * @package $NAMESPACE$
- */
 class AppServiceProvider extends ServiceProvider
 {
     private $moduleSvc;
@@ -26,8 +23,8 @@ class AppServiceProvider extends ServiceProvider
         $this->registerLinks();
 
         // Uncomment this if you have migrations
-        $this->loadMigrationsFrom(__DIR__ . '/../Database/migrations');
-        
+        $this->loadMigrationsFrom(__DIR__.'/../Database/migrations');
+
         // Register the widget namespace
         app('arrilot.widget-namespaces')->registerNamespace('SPTransfer', 'Modules\SPTransfer\Widgets');
     }
@@ -41,12 +38,12 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
-     * Add module links here
+     * Add module links here.
      */
     public function registerLinks(): void
     {
         // Show this link if logged in
-        $this->moduleSvc->addFrontendLink('HUB Transfer', '/sptransfer', 'fas fa-exchange-alt', $logged_in=true);
+        $this->moduleSvc->addFrontendLink('HUB Transfer', '/sptransfer', 'fas fa-exchange-alt', $logged_in = true);
 
         // Admin links:
         $this->moduleSvc->addAdminLink('SPTransfer', '/admin/sptransfer', 'pe-7s-back');
@@ -72,17 +69,18 @@ class AppServiceProvider extends ServiceProvider
         $viewPath = resource_path('views/modules/sptransfer');
         $sourcePath = __DIR__.'/../Resources/views';
 
-        $this->publishes([$sourcePath => $viewPath],'views');
+        $this->publishes([$sourcePath => $viewPath], 'views');
 
         $this->loadViewsFrom(array_merge(array_filter(array_map(function ($path) {
             $path = str_replace('default', setting('general.theme'), $path);
             // Check if the directory exists before adding it
-            if (file_exists($path.'/modules/sptransfer') && is_dir($path.'/modules/sptransfer'))
-              return $path.'/modules/sptransfer';
+            if (file_exists($path.'/modules/sptransfer') && is_dir($path.'/modules/sptransfer')) {
+                return $path.'/modules/sptransfer';
+            }
 
             return null;
         }, \Config::get('view.paths'))), [$sourcePath]), 'sptransfer');
-        
+
         // Register the views namespace
         $this->loadViewsFrom($sourcePath, 'SPTransfer');
     }
@@ -97,9 +95,7 @@ class AppServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'SPTransfer');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'SPTransfer');
+            $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'SPTransfer');
         }
     }
-
-
 }

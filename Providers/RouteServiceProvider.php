@@ -2,14 +2,13 @@
 
 namespace Modules\SPTransfer\Providers;
 
-use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Modules\SPTransfer\Http\Controllers\Admin\AdminController;
-use Modules\SPTransfer\Http\Controllers\Frontend\FrontendController;
 
 /**
- * Register the routes required for your module here
+ * Register the routes required for your module here.
  */
 class RouteServiceProvider extends ServiceProvider
 {
@@ -25,7 +24,8 @@ class RouteServiceProvider extends ServiceProvider
      *
      * Register any model bindings or pattern based filters.
      *
-     * @param  Router $router
+     * @param Router $router
+     *
      * @return void
      */
     public function before(Router $router)
@@ -46,9 +46,6 @@ class RouteServiceProvider extends ServiceProvider
         $this->registerAdminRoutes();
     }
 
-    /**
-     *
-     */
     protected function registerWebRoutes(): void
     {
         $config = [
@@ -73,7 +70,7 @@ class RouteServiceProvider extends ServiceProvider
             'namespace'  => $this->namespace.'\Admin',
             'middleware' => ['web', 'role:admin'],
         ];
-    
+
         Route::group($config, function () {
             Route::group(['as' => 'sptransfer.', 'prefix' => 'sptransfer/'], function () {
                 Route::get('/', 'AdminController@index')->name('index');
@@ -84,6 +81,4 @@ class RouteServiceProvider extends ServiceProvider
             });
         });
     }
-
-    
 }
