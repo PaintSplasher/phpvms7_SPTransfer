@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
     public function registerLinks(): void
     {
         // Show this link if logged in
-        $this->moduleSvc->addFrontendLink('HUB Transfer', '/sptransfer', 'fas fa-exchange-alt', $logged_in = true);
+        $this->moduleSvc->addFrontendLink('HUB Transfer', '/sptransfer', 'bi bi-shuffle', $logged_in = true);
 
         // Admin links:
         $this->moduleSvc->addAdminLink('SPTransfer', '/admin/sptransfer', 'pe-7s-back');

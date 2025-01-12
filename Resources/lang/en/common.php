@@ -23,4 +23,5 @@ return [
     'reqform'   => 'Request Form',
     'chars'     => 'maximal 100 characters',
     'notenough' => 'Not enough balance to perform a HUB transfer. You need',
+    'selectplace' => 'Type to begin search',
 ];

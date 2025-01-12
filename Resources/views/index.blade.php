@@ -6,7 +6,7 @@
     <h2>@lang('SPTransfer::common.title')</h2>
     @include('flash::message')
     <div class="row">
-      <div class="col-sm-8">
+      <div class="col-sm-7">
         @if($state === 0)
           <h4 class="description mt-0">@lang('SPTransfer::common.reqform')</h4>
           <div class="alert alert-warning" role="alert">@lang('SPTransfer::common.reqis') {{ $status }}.</div>
@@ -17,11 +17,11 @@
             <form method="POST" action="{{ route('sptransfer.store') }}">
               @csrf
               <h4 class="description mt-0">@lang('SPTransfer::common.based') {{ $current_hub_name }} ({{ strtoupper($current_hub) }})</h4>
-              <div class="mt-3">
+              <div class="mb-3">
                 <div>@lang('SPTransfer::common.desired')</div>
-                <select name="hub_request_id" id="hub_request_id" class="form-control airport_search hubs_only" required></select>       
+                <select name="hub_request_id" id="hub_request_id" class="form-select airport_search hubs_only" placeholder="@lang('SPTransfer::common.selectplace')" required></select> 
               </div>
-              <div class="mt-3">
+              <div class="mb-3">
                 <div>@lang('SPTransfer::common.reason')</div>
                 <textarea name="reason" id="reason" class="form-control" maxlength="100" placeholder="@lang('SPTransfer::common.chars')" required></textarea>
               </div>
@@ -32,12 +32,12 @@
                   <p class="float-left text-muted mt-3">@lang('SPTransfer::common.charged') {{ $spvalue }} @lang('SPTransfer::common.ontransfer').</p>
                 @endif                
               @endif
-              <button type="submit" class="btn btn-outline-info pull-right btn-lg">@lang('SPTransfer::common.request')</button>
+              <button type="submit" class="btn btn-primary">@lang('SPTransfer::common.request')</button>
             </form>
           @endif
         @endif
       </div>
-      <div class="col-sm-4">
+      <div class="col-sm-5">
         <h4 class="description mt-0">@lang('SPTransfer::common.lasttitle')</h4>
         @if(empty($lasttransfer))
           <div class="alert alert-info" role="alert">@lang('SPTransfer::common.didnot')</div>

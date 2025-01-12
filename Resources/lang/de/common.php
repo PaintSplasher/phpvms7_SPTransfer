@@ -23,4 +23,5 @@ return [
     'reqform'   => 'Transfer Formular',
     'chars'     => 'Maximal 100 Zeichen',
     'notenough' => 'Du besitzt nicht ausreichend Geld um einen Transfer zu bezahlen. Die Kosten betragen',
+    'selectplace' => 'Airport eingeben um die Suche zu starten',
 ];

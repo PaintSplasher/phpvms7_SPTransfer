@@ -1,9 +1,9 @@
-# SPTransfer v1.3
+# SPTransfer v1.7
 
 phpVMS v7 module for a HUB Transfer feature
 
-* Module supports **only** php8.1+ and laravel10
-* Minimum required phpVMS v7 version is `phpVMS 7.0.0-dev+240613.77cd59` / 13.June.2024
+* Module supports **only** php8.2+ and laravel 11
+* Minimum required phpVMS v7 version is `phpVMS 7.1.0-alpha.0+250112.fee20d` / 12. January 2025
 
 The frontend module blade is designed for the **Original** and **Disposable Theme**.
 [Disposable Theme (By FatihKoz)](https://github.com/FatihKoz/DisposableTheme)
@@ -54,6 +54,12 @@ Do **not** remove the Link that is visible in your admin center. Feel free to pu
 Please use the GitHub [issue](https://github.com/PaintSplasher/phpvms7_SPTransfer/issues) tracker.
 
 ## Release / Update Notes
+
+12.January.25
+* Languages ES, FR, IT, PT, JP, TR added
+* Smaller bootstrap 5 icon and template changes
+* Some StyleCI fixes for cleaner
+* phpVMS minimum version change
 
 29.October.24
 * Added an option for different charge types
