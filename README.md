@@ -58,7 +58,7 @@ Please use the GitHub [issue](https://github.com/PaintSplasher/phpvms7_SPTransfe
 12.January.25
 * Languages ES, FR, IT, PT, JP, TR added
 * Smaller bootstrap 5 icon and template changes
-* Some StyleCI fixes for cleaner
+* Some StyleCI fixes
 * phpVMS minimum version change
 
 29.October.24
