@@ -8,7 +8,7 @@
       </div>
       <div class="col-xs-7">
         <div class="numbers">
-          <p>Hub Transfer</p>
+          <p>Transfers</p>
           <a href="{{ route('admin.sptransfer.index') }}">{{ $pending }} pending</a>
         </div>
       </div>

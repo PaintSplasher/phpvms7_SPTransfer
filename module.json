@@ -1,8 +1,8 @@
 {
     "name": "SPTransfer",
     "alias": "sptransfer",
-    "description": "phpVMS v7 module for a Hub Transfer feature",
-    "version": "1.7",
+    "description": "phpVMS v7 module for a Hub/Airline Transfer feature",
+    "version": "1.8",
     "readme_url": "https://github.com/PaintSplasher/phpvms7_SPTransfer?tab=readme-ov-file",
     "license_url": "https://github.com/PaintSplasher/phpvms7_SPTransfer?tab=License-1-ov-file",
     "attribution": {

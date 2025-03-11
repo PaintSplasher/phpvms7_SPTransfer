@@ -56,10 +56,13 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::group($config, function () {
             Route::group(['middleware' => 'auth', 'prefix' => 'sptransfer'], function () {
-                Route::get('/', 'FrontendController@index')->name('index');
-                Route::post('/', 'FrontendController@store')->name('store');
+                Route::get('/hub', 'HubFrontendController@index')->name('hub.index'); 
+                Route::post('/hub', 'HubFrontendController@store')->name('hub.store');        
+                Route::get('/airline', 'AirlineFrontendController@index')->name('airline.index'); 
+                Route::post('/airline', 'AirlineFrontendController@store')->name('airline.store');
             });
         });
+        
     }
 
     protected function registerAdminRoutes(): void
@@ -75,8 +78,7 @@ class RouteServiceProvider extends ServiceProvider
             Route::group(['as' => 'sptransfer.', 'prefix' => 'sptransfer/'], function () {
                 Route::get('/', 'AdminController@index')->name('index');
                 Route::post('/update', 'AdminController@update')->name('update');
-                // Route::post('/deny', 'AdminController@deny')->name('deny');
-                // Route::post('/delete', 'AdminController@delete')->name('delete');
+                Route::post('/update_airline', 'AdminController@update_airline')->name('update_airline');
                 Route::post('/storeSettings', 'AdminController@storeSettings')->name('storeSettings');
             });
         });

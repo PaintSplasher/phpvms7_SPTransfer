@@ -24,4 +24,11 @@ return [
     'chars'     => 'Maximal 100 Zeichen',
     'notenough' => 'Du besitzt nicht ausreichend Geld um einen Transfer zu bezahlen. Die Kosten betragen',
     'selectplace' => 'Airport eingeben um die Suche zu starten',
+    'title-a'     => 'Anfrage für einen Airline-Transfer',
+    'based-a'     => 'Sie sind ein Pilot bei',
+    'limited-a'   => 'Sie können nur alle',
+    'desired-a'   => 'Gewünschte Transfer-Airline',
+    'reason-a'    => 'Grund für Ihren Airline-Transfer',
+    'notenough-a' => 'Nicht genügend Guthaben für einen Airline-Transfer. Sie benötigen',
+    'reqhub-a'    => 'Angeforderte Airline',
 ];

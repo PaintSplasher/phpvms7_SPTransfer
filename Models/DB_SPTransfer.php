@@ -23,6 +23,7 @@ class DB_SPTransfer extends Model
         'reason',
         'reject_reason',
         'state',
+        'airline',
     ];
 
     // Technically not needed for default fields but here for exampling purposes
@@ -40,6 +41,7 @@ class DB_SPTransfer extends Model
         'reason'         => 'nullable',
         'reject_reason'  => 'nullable',
         'state'          => 'nullable',
+        'airline'        => 'nullable',
     ];
 
     // Allows sortable columns in views without performance loss
@@ -50,6 +52,7 @@ class DB_SPTransfer extends Model
         'hub_request_id',
         'reason',
         'state',
+        'airline',
         'created_at',
         'updated_at',
     ];
