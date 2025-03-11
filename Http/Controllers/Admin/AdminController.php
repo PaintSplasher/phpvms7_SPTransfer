@@ -3,8 +3,8 @@
 namespace Modules\SPTransfer\Http\Controllers\Admin;
 
 use App\Contracts\Controller;
-use App\Models\User;
 use App\Models\Airline;
+use App\Models\User;
 use App\Services\FinanceService;
 use App\Support\Money;
 use Carbon\Carbon;
@@ -20,22 +20,22 @@ class AdminController extends Controller
     {
         $requests = DB_SPTransfer::with('user')->where('airline', 0)->sortable(['created_at' => 'desc'])->paginate(10);
         $requests_airline = DB_SPTransfer::with('user')->where('airline', 1)->sortable(['created_at' => 'desc'])->paginate(10);
-    
+
         $settings = DB_SPSettings::where('id', 1)->first();
         $settings_airline = DB_SPSettings::where('id', 2)->first();
-    
+
         foreach ($requests_airline as $request) {
             $airport = Airline::find($request->hub_initial_id);
             $request->airport_name = $airport ? $airport->name : null;
         }
-    
+
         return view('sptransfer::admin.index', [
-            'requests' => $requests,
+            'requests'         => $requests,
             'requests_airline' => $requests_airline,
-            'settings' => $settings,
+            'settings'         => $settings,
             'settings_airline' => $settings_airline,
         ]);
-    }    
+    }
 
     // Handle the hub request
     public function update(Request $request)
@@ -86,7 +86,7 @@ class AdminController extends Controller
             // Approve Request and Update User Home Airport
             $settings = DB_SPSettings::first();
             $airlines = Airline::where('active', 1)->orderBy('icao')->select('id', 'icao', 'name')->get();
-            $airlineNameRequest = $airlines->firstWhere('id', $sptransfer->hub_request_id);   
+            $airlineNameRequest = $airlines->firstWhere('id', $sptransfer->hub_request_id);
 
             if ($settings->charge_type === 1 && $settings->price > 0) {
                 $memo = 'Airline Transfer request to '.$airlineNameRequest->name;

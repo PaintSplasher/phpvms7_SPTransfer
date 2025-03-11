@@ -5,7 +5,6 @@ namespace Modules\SPTransfer\Providers;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Modules\SPTransfer\Http\Controllers\Admin\AdminController;
 
 /**
  * Register the routes required for your module here.
@@ -56,13 +55,12 @@ class RouteServiceProvider extends ServiceProvider
 
         Route::group($config, function () {
             Route::group(['middleware' => 'auth', 'prefix' => 'sptransfer'], function () {
-                Route::get('/hub', 'HubFrontendController@index')->name('hub.index'); 
-                Route::post('/hub', 'HubFrontendController@store')->name('hub.store');        
-                Route::get('/airline', 'AirlineFrontendController@index')->name('airline.index'); 
+                Route::get('/hub', 'HubFrontendController@index')->name('hub.index');
+                Route::post('/hub', 'HubFrontendController@store')->name('hub.store');
+                Route::get('/airline', 'AirlineFrontendController@index')->name('airline.index');
                 Route::post('/airline', 'AirlineFrontendController@store')->name('airline.store');
             });
         });
-        
     }
 
     protected function registerAdminRoutes(): void

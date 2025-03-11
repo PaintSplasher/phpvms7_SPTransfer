@@ -52,20 +52,20 @@ class AirlineFrontendController extends Controller
         }
 
         return view('sptransfer::airline', [
-            'airlines'          => $airlines,
-            'current_airline'   => $user->airline->icao,
+            'airlines'              => $airlines,
+            'current_airline'       => $user->airline->icao,
             'current_airline_name'  => $user->airline->name,
-            'request_airline'   => isset($airlineNameRequest) ? $airlineNameRequest : null,
-            'lasttransfer'      => isset($last_transfer) ? $last_transfer : null,
-            'status'            => isset($statusLabel) ? $statusLabel : null,
-            'state'             => $last_transfer->state ?? null,
-            'limit'             => $limit ?? null,
-            'daysLimit'         => $daysLimit ?? null,
-            'spfinance'         => isset($spfinance) ? $spfinance : false,
-            'spcost'            => isset($spcost) ? $spcost : 0,
-            'spvalue'           => isset($spvalue) ? $spvalue : 0,
-            'reject_reason'     => isset($last_transfer->reject_reason),
-            'charge_type'       => $settings->charge_type,
+            'request_airline'       => isset($airlineNameRequest) ? $airlineNameRequest : null,
+            'lasttransfer'          => isset($last_transfer) ? $last_transfer : null,
+            'status'                => isset($statusLabel) ? $statusLabel : null,
+            'state'                 => $last_transfer->state ?? null,
+            'limit'                 => $limit ?? null,
+            'daysLimit'             => $daysLimit ?? null,
+            'spfinance'             => isset($spfinance) ? $spfinance : false,
+            'spcost'                => isset($spcost) ? $spcost : 0,
+            'spvalue'               => isset($spvalue) ? $spvalue : 0,
+            'reject_reason'         => isset($last_transfer->reject_reason),
+            'charge_type'           => $settings->charge_type,
         ]);
     }
 
@@ -84,9 +84,9 @@ class AirlineFrontendController extends Controller
         $airlineNameinitial = $airlines->firstWhere('id', $user->airline->id);
         $airlineNameRequest = $airlines->firstWhere('id', $request->airline_request_id);
 
-        if ((int) $user->airline->id === (int) $request->airline_request_id) { 
+        if ((int) $user->airline->id === (int) $request->airline_request_id) {
             flash()->error('You are already assigned to this airline.');
-        
+
             return redirect(route('sptransfer.airline.index'));
         }
 
