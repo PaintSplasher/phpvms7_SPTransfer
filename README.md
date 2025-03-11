@@ -8,10 +8,10 @@ phpVMS v7 module for a Hub/Airline Transfer feature
 The frontend module blade is designed for the **Original** and **Disposable Theme**.
 [Disposable Theme (By FatihKoz)](https://github.com/FatihKoz/DisposableTheme)
 
-* If you are using the original Theme, you need nothing to do.
+If you are using the original Theme, you need nothing to do.
 * If you are using the Disposable Theme, just **rename** `/modules/SPTransfer/Resources/views/hub.blade.php` to `/modules/SPTransfer/Resources/views/original_hub.blade.php` 
 * If you are using the Disposable Theme, just **rename** `/modules/SPTransfer/Resources/views/airline.blade.php` to `/modules/SPTransfer/Resources/views/original_airline.blade.php` 
-* **and**
+**and**
 * `/modules/SPTransfer/Resources/views/disposable_hub.blade.php` to `/modules/SPTransfer/Resources/views/hub.blade.php`
 * `/modules/SPTransfer/Resources/views/disposable_airline.blade.php` to `/modules/SPTransfer/Resources/views/airline.blade.php`
 
@@ -61,7 +61,7 @@ Please use the GitHub [issue](https://github.com/PaintSplasher/phpvms7_SPTransfe
 ## Release / Update Notes
 
 11.March.25
-* **Note**: The routes has changed
+* **Note**: The routes has changed: ``/sptransfer/hub`` and ``/sptransfer/airline``
 * Added a new feature for an airline transfer
 * Added an option when a pilot gets charged
 * Added phrases to all languages
