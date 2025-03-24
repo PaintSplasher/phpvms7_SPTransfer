@@ -164,7 +164,7 @@
                         @foreach($requests as $request)
                         <tr>
                           <td>{{ $request->id }}</td>
-                          <td><a href="{{ route('admin.users.edit', [$request->user_id]) }}">{{ $request->user->name }}</a></td>
+                          <td><a href="{{ route('admin.users.edit', [$request->user_id]) }}">{{ optional($request->user)->name ?? 'Deleted User' }}</a></td>
                           <td class="text-center">{{ $request->hub_initial_id }}</td>
                           <td class="text-center">{{ $request->hub_request_id }}</td>
                           <td style="word-break: break-word">{{ $request->reason }}</td>
@@ -231,7 +231,7 @@
                         @foreach($requests_airline as $request)
                         <tr>
                           <td>{{ $request->id }}</td>
-                          <td><a href="{{ route('admin.users.edit', [$request->user_id]) }}">{{ $request->user->name }}</a></td>
+                          <td><a href="{{ route('admin.users.edit', [$request->user_id]) }}">{{ optional($request->user)->name ?? 'Deleted User' }}</a></td> 
                           <td class="text-center">{{ $request->airport_name }}</td>
                           <td class="text-center">{{ $request->airport_name }}</td>
                           <td style="word-break: break-word">{{ $request->reason }}</td>
